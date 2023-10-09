@@ -44,7 +44,7 @@ jobs:
       run: ls
 
     - name: Build with Maven
-      run: mvn -B package --file ../../onlinebookstore-J2EE/pom.xml
+      run: mvn -B package --file /onlinebookstore-J2EE/pom.xml
 
     - name: Tree Command
       run: tree
