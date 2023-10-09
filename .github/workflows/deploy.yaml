@@ -59,7 +59,11 @@ jobs:
     - name: Docker push
       run: |
         docker push gitauwairimu/javamvn:${GITHUB_RUN_ID}
-    
+
+    - name: Docker Run
+      run: |
+        docker run -p 8080:8080 gitauwairimu/javamvn:${GITHUB_RUN_ID}
+
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
