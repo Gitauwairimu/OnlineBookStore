@@ -1,0 +1,200 @@
+name: Maven Package - Multi stage docker
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  deployments: write
+  contents: write
+  id-token: write
+  actions: write
+  checks: write
+  discussions: write
+  issues: write
+  pages: read
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+env:
+  DATREE_TOKEN: ${{ secrets.DATREE_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      jar_version: ${{ steps.bump.outputs.jar_version }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Docker build
+      run: |
+        docker build . -t gitauwairimu/javamvn:${GITHUB_RUN_ID}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Docker push
+      run: |
+        docker push gitauwairimu/javamvn:${GITHUB_RUN_ID}
+
+    # - name: Checkout K8s manifest repo
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: Gitauwairimu/GitOps--ghjavamvn
+    #     ref: 'main'
+    #     persist-credentials: true
+    #     fetch-depth: 0
+    #     path: ./base
+    #   env:
+    #     # GITHUB_TOKEN: ${{ secrets.k8s_REPO_UPDATE }}
+    #     GITHUB_TOKEN: ${{secrets.ACTIONS_RUNNER_TOKEN}}
+
+    # - name: Set ${GITHUB_RUN_ID}
+    #   run: echo "${GITHUB_RUN_ID}" > .github/workflows/run_id
+    # - name: Wait for ${GITHUB_RUN_ID}
+    #   run: 
+    
+    # - name: Update k8s manifest with new image
+    #   run: |
+    #     cd base/base
+    #     sed -i "s|image: .*|image: gitauwairimu/javamvn:${GITHUB_RUN_ID}|g" deployment.yaml
+
+    # - name: setup git config
+    #   env:
+    #     GH_TOKEN: ${{ secrets.ACTIONS_RUNNER_TOKEN }}
+    #     GH_USER: Gitauwairimu
+    #     REPO: GitOps--ghjavamvn.git
+    #   shell: bash
+    #   working-directory: base
+    #   run: |
+    #     ls
+        # cd base
+        # ls
+        # git remote set-url origin https://$GH_USER:${{ secrets.GITHUB_TOKEN }}@github.com/$GH_USER/$REPO
+        # git remote set-url origin https://github.com/$GH_USER/$REPO
+        # git push https://${{ secrets.GITHUB_TOKEN }}@github.com/$GH_USER/$REPO
+        
+        # git config --global user.name "charles"
+        # git config --global user.email "gitauwairimu@gmail.com"
+        # # commit_author: Author <actions@github.com>
+        # git add base/deployment.yaml
+        # git commit -m 'updated k8s manifest image version'
+
+    # - name: Checkout helm chart
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: Gitauwairimu/ghjavamvn
+    #     token: ${{ secrets.ACTIONS_RUNNER_TOKEN }}
+    #     path: ./base
+    #     ref: refs/heads/main
+
+
+    - name: Checkout K8s manifest repo
+      uses: actions/checkout@v3
+      with:
+        repository: Gitauwairimu/GitOps--ghjavamvn
+        ref: 'main'
+        persist-credentials: true
+        fetch-depth: 0
+        path: ./base
+      env:
+        # GITHUB_TOKEN: ${{ secrets.k8s_REPO_UPDATE }}
+        GITHUB_TOKEN: ${{secrets.ACTIONS_RUNNER_TOKEN}}
+
+    - name: Update chart.yaml
+      run: |
+        cd base/base
+        sed -i "s|image: .*|image: gitauwairimu/javamvn:${GITHUB_RUN_ID}|g" deployment.yaml
+
+    # - name: Run Datree Policy Check
+    #   uses: datreeio/action-datree@main
+    #   with:
+    #     path: 'base/base/deployment.yaml'
+    #     cliArguments: '--schema-version 1.20.0'
+
+
+    # - name: Push Image Update changes
+    #   uses: EndBug/add-and-commit@v7
+    #   with:
+    #     cwd: base
+    #     message: 'update image version'
+    #     branch: main
+    #     GITHUB_TOKEN: ${{secrets.ACTIONS_RUNNER_TOKEN}}
+    #     push: --force
+    #     default_author: user_info
+        # git config user.name 'github-actions[bot]'
+
+
+        # git push origin https://$GH_USER:$GH_TOKEN@github.com/$GH_USER/$REPO
+        # git push -u origin https://$GH_USER:$GH_TOKEN@github.com/$GH_USER/$REPO main -f
+
+        # git remote set-url origin https://$GH_USER:$GH_TOKEN@github.com/$GH_USER/$REPO
+        
+        # git push https://$GH_USER:$GH_TOKEN@github.com/$GH_USER/GitOps--ghjavamvn.git -f
+        #  git push origin main
+
+
+
+    # - uses: stefanzweifel/git-auto-commit-action@v4
+    #   with:
+    #     commit_message: Apply php-cs-fixer changes
+    #     # sed -i "s|image: .*|image: gitauwairimu/javamvn:${GITHUB_RUN_ID}|g" deployment.yaml
+    #     push_options: --force
+    #     repository: base/base
+    #     commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
+    #     commit_user_email: my-github-actions-bot@example.org # defaults to "41898282+github-actions[bot]@users.noreply.github.com"
+    #     commit_author: Author <actions@github.com> # defaults to author of the commit that triggered the run
+
+
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     repository: Gitauwairimu/GitOps--ghjavamvn
+    #     force_with_lease: true
+    #     branch: main
+    # - uses: fastify/github-action-merge-dependabot@v2.1.1
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ secrets.ACTIONS_RUNNER_TOKEN }}
+    #     repository: Gitauwairimu/GitOps--ghjavamvn
+    #     branch: main
+    #     force_with_lease: true
+        # 
+      # env:
+      #   GITHUB_TOKEN: ${{ secrets.k8s_REPO_UPDATE }}
+
+
+
+    # - name: Push Repo changes
+    #   uses: EndBug/add-and-commit@v7
+    #   with:
+    #     cwd: ./base
+    #     message: 'update image version'
+    #     branch: main
+
+
