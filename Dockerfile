@@ -2,10 +2,6 @@
 # FROM openjdk:8-jre-alpine3.9
 FROM openjdk:22-slim-bullseye
 
-RUN pwd
-
-RUN tree
-
 WORKDIR /app
 # copy the packaged jar file into our docker image
 COPY target/onlinebookstore-0.0.1-SNAPSHOT.war /app/online-bookstore-app.war
