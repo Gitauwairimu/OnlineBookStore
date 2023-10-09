@@ -41,7 +41,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: LS
-      run: ls
+      run: tree
 
     - name: Build with Maven
       run: mvn -B package --file /onlinebookstore-J2EE/pom.xml
