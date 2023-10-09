@@ -60,11 +60,8 @@ jobs:
 
     - name: Insert Creds into settings.xml
       run: |
-        sed -i "s|<username>*|<username>${TOMCAT_USERNAME}</username>|g" settings.xml
-        sed -i "s|<username>*|<password>${TOMCAT_PASSWORD}</password>|g" settings.xml
-    
-    - name: Read settings.xml
-      run: |
+        sed -i "s|<username>*|<username>${secrets.TOMCAT_USERNAME}</username>|g" settings.xml
+        sed -i "s|<username>*|<password>${secrets.TOMCAT_PASSWORD}</password>|g" settings.xml
         cat settings.xml
 
     - id: 'auth'
