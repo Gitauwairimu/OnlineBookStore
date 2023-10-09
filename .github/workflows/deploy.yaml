@@ -72,7 +72,7 @@ jobs:
         version: '>= 363.0.0'
 
     # Configure Docker to use the gcloud command-line tool as a credential
-    # helper for authentication
+    # helper for authentications
     - run: |-
         gcloud --quiet auth configure-docker
 
