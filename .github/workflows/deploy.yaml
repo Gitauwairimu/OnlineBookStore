@@ -58,6 +58,11 @@ jobs:
     #   run: |
     #     docker push gitauwairimu/javamvn:${GITHUB_RUN_ID}
 
+    - name: Insert Creds into settings.xml
+      run: |
+        sed -i "s|<username>*|<username>${TOMCAT_USERNAME}</username>|g" settings.xml
+        sed -i "s|<username>*|<password>${TOMCAT_PASSWORD}</password>|g" settings.xml
+    
     - name: Read settings.xml
       run: |
         cat settings.xml
