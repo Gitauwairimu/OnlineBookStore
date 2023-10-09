@@ -4,7 +4,7 @@ FROM openjdk:22-slim-bullseye
 
 WORKDIR /app
 # copy the packaged jar file into our docker image
-COPY target/online-bookstore-app.war /app/online-bookstore-app.war
+COPY target/onlinebookstore-0.0.1-SNAPSHOT.war /app/online-bookstore-app.war
 
 EXPOSE 8080
 
