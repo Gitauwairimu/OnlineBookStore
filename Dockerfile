@@ -10,6 +10,6 @@ EXPOSE 8080
 
 # set the startup command to execute the jar
 # CMD java - jar /my-app-1.0-SNAPSHOT.jar
-CMD ["java", "-jar", "/app/online-bookstore-app.war"]
+CMD ["java", "/app/online-bookstore-app.war"]
 
 
