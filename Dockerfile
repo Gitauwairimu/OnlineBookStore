@@ -2,7 +2,7 @@
 # FROM openjdk:8-jre-alpine3.9
 FROM openjdk:22-slim-bullseye
 
-RUN ls /target
+RUN ls target/
 
 WORKDIR /app
 # copy the packaged jar file into our docker image
