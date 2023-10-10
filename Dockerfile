@@ -13,37 +13,37 @@ EXPOSE 8080
 CMD ["java", "/app/online-bookstore-app.war"]
 
 
-#!/bin/bash
+# #!/bin/bash
 
-# Install the default JDK
-apt-get update
+# # Install the default JDK
+# apt-get update
 
-# Create the tomcat directory
-mkdir /tomcat
+# # Create the tomcat directory
+# mkdir /tomcat
 
-# Install the default JDK
-apt-get install default-jdk
+# # Install the default JDK
+# apt-get install default-jdk
 
-# Change to the tomcat directory
-cd /tomcat
+# # Change to the tomcat directory
+# cd /tomcat
 
-# Download the Tomcat 10.1.13 binary archive
-wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.13/bin/apache-tomcat-10.1.13.zip
+# # Download the Tomcat 10.1.13 binary archive
+# wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.13/bin/apache-tomcat-10.1.13.zip
 
-# Install unzip
-apt-get install unzip
+# # Install unzip
+# apt-get install unzip
 
-# Unzip the Tomcat binary archive
-unzip apache-tomcat-10.1.13.zip
+# # Unzip the Tomcat binary archive
+# unzip apache-tomcat-10.1.13.zip
 
-# Remove the Tomcat binary archive
-rm apache-tomcat-10.1.13.zip
+# # Remove the Tomcat binary archive
+# rm apache-tomcat-10.1.13.zip
 
-# Change to the Tomcat bin directory
-cd apache-tomcat-10.1.13/bin
+# # Change to the Tomcat bin directory
+# cd apache-tomcat-10.1.13/bin
 
-# Make the Tomcat startup scripts executable
-chmod 700 *.sh
+# # Make the Tomcat startup scripts executable
+# chmod 700 *.sh
 
-# Start Tomcat
-./startup.sh
+# # Start Tomcat
+# ./startup.sh

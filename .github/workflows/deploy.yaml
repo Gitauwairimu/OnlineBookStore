@@ -43,6 +43,12 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file onlinebookstore-J2EE/pom.xml
 
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: war-artifact
+        path: onlinebookstore-J2EE/target/onlinebookstore-0.0.1-SNAPSHOT.war
+        retention-days: 5
    
     # - name: Docker build
     #   run: |
@@ -58,11 +64,11 @@ jobs:
     #   run: |
     #     docker push gitauwairimu/javamvn:${GITHUB_RUN_ID}
 
-    - name: Insert Creds into settings.xml
-      run: |
-        sed -i "s|<username>*|<username>${secrets.TOMCAT_USERNAME}</username>|g" settings.xml
-        sed -i "s|<username>*|<password>${secrets.TOMCAT_PASSWORD}</password>|g" settings.xml
-        cat settings.xml
+    # - name: Insert Creds into settings.xml
+    #   run: |
+    #     sed -i "s|<username>*|<username>${secrets.TOMCAT_USERNAME}</username>|g" settings.xml
+    #     sed -i "s|<username>*|<password>${secrets.TOMCAT_PASSWORD}</password>|g" settings.xml
+    #     cat settings.xml
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
