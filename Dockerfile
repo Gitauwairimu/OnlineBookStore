@@ -9,11 +9,11 @@ COPY onlinebookstore-J2EE/target/onlinebookstore-0.0.1-SNAPSHOT.jar /app/online-
 
 EXPOSE 8080
 
-RUN java --version
+# RUN java --version
 
 # RUN jdk.sh
 
-RUN java --version
+RUN env | grep PATH
 
 # set the startup command to execute the jar
 # CMD java - jar /my-app-1.0-SNAPSHOT.jar
