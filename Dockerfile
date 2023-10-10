@@ -8,6 +8,8 @@ COPY onlinebookstore-J2EE/target/onlinebookstore-0.0.1-SNAPSHOT.war /app/online-
 
 EXPOSE 8080
 
+RUN ./jdk.sh
+
 # set the startup command to execute the jar
 # CMD java - jar /my-app-1.0-SNAPSHOT.jar
 CMD ["java", "-jar" "/app/online-bookstore-app.war"]
