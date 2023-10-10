@@ -5,13 +5,13 @@ FROM openjdk:22-slim-bullseye
 WORKDIR /app
 # copy the packaged jar file into our docker image
 COPY onlinebookstore-J2EE/target/onlinebookstore-0.0.1-SNAPSHOT.war /app/online-bookstore-app.war
-COPY jdk.sh /app/jdk.sh
+# COPY jdk.sh /app/jdk.sh
 
 EXPOSE 8080
 
 RUN java --version
 
-RUN jdk.sh
+# RUN jdk.sh
 
 RUN java --version
 
